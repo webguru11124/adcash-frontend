@@ -9,25 +9,39 @@ const CampaignDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCampaign = async () => {
-      if(!id) return;
-      const data = await getCampaignById(id);
-      setCampaign(data);
-      setLoading(false);
+      try {
+        if(!id) return;
+        const data = await getCampaignById(id);
+        setCampaign(data);
+      } catch {
+        setError('Failed to fetch campaign details.');
+      } finally {
+        setLoading(false);
+      }
     };
     fetchCampaign();
   }, [id]);
 
   const handleDelete = async () => {
-    if(!id) return;
-    await deleteCampaign(id);
-    navigate('/');
+    try {
+      if(!id) return;
+      await deleteCampaign(id);
+      navigate('/');
+    } catch {
+      setError('Failed to delete campaign.');
+    }
   };
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   if (!campaign) {

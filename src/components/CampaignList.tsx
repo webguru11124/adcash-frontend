@@ -7,11 +7,16 @@ const CampaignList: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCampaigns, setFilteredCampaigns] = useState<Campaign[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getCampaigns = async () => {
-      const data = await fetchCampaigns();
-      setCampaigns(data);
+      try {
+        const data = await fetchCampaigns();
+        setCampaigns(data);
+      } catch {
+        setError('Failed to fetch campaigns.');
+      }
     };
 
     getCampaigns();
@@ -27,26 +32,36 @@ const CampaignList: React.FC = () => {
   }, [searchTerm, campaigns]);
 
   const handleRun = async (id: string) => {
-    await runCampaign(id);
-    const updatedCampaigns = await fetchCampaigns();
-    setCampaigns(updatedCampaigns);
+    try {
+      await runCampaign(id);
+      const updatedCampaigns = await fetchCampaigns();
+      setCampaigns(updatedCampaigns);
+    } catch {
+      setError('Failed to run campaign.');
+    }
   };
 
   const handleStop = async (id: string) => {
-    await stopCampaign(id);
-    const updatedCampaigns = await fetchCampaigns();
-    setCampaigns(updatedCampaigns);
+    try {
+      await stopCampaign(id);
+      const updatedCampaigns = await fetchCampaigns();
+      setCampaigns(updatedCampaigns);
+    } catch {
+      setError('Failed to stop campaign.');
+    }
   };
 
   return (
-    <div>
+    <div className="container mx-auto p-4">
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       <input
         type="text"
         placeholder="Search by Title, URL, or Status"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        className="mb-4 p-2 border border-gray-300 rounded w-full"
       />
-      <ul>
+      <ul className="space-y-4">
         {filteredCampaigns.map(campaign => (
           <li key={campaign.id}>
             <CampaignItem
