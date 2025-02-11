@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { Campaign, CampaignFormData } from '../types';
 
-const API_URL = '/api/campaigns';
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const fetchCampaigns = async (): Promise<Campaign[]> => {
   const response = await axios.get<Campaign[]>(API_URL);
