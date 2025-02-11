@@ -1,64 +1,83 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm, useFieldArray, Controller } from 'react-hook-form';
+import { CampaignFormData } from '../types';
 
-const CampaignForm: React.FC<{ onSubmit: (campaign: { title: string; landingPageUrl: string; payouts: number[] }) => void }> = ({ onSubmit }) => {
-  const [title, setTitle] = useState('');
-  const [landingPageUrl, setLandingPageUrl] = useState('');
-  const [payouts, setPayouts] = useState<number[]>([0]);
+const CampaignForm: React.FC<{ onSubmit: (campaign: CampaignFormData) => void }> = ({ onSubmit }) => {
+  const { control, handleSubmit, reset } = useForm<CampaignFormData>({
+    defaultValues: {
+      title: '',
+      landingPageUrl: '',
+      isRunning: false,
+      payouts: [{ amount: 0, country: '' }],
+    },
+  });
 
-  const handlePayoutChange = (index: number, value: number) => {
-    const newPayouts = [...payouts];
-    newPayouts[index] = value;
-    setPayouts(newPayouts);
-  };
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'payouts',
+  });
 
-  const addPayout = () => {
-    setPayouts([...payouts, 0]);
-  };
-
-  const removePayout = (index: number) => {
-    setPayouts(payouts.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!title || !landingPageUrl || payouts.length === 0 || payouts.some(payout => payout <= 0)) {
-      alert('Please fill in all fields and ensure at least one payout is greater than zero.');
+  const submitHandler = (data: CampaignFormData) => {
+    if (data.payouts.some(payout => payout.amount <= 0 || !payout.country)) {
+      alert('Please ensure all payouts have a valid amount and country.');
       return;
     }
-    onSubmit({ title, landingPageUrl, payouts });
-    setTitle('');
-    setLandingPageUrl('');
-    setPayouts([0]);
+    onSubmit(data);
+    reset();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(submitHandler)}>
       <div>
         <label>
           Title:
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => <input type="text" {...field} required />}
+          />
         </label>
       </div>
       <div>
         <label>
           Landing Page URL:
-          <input type="url" value={landingPageUrl} onChange={(e) => setLandingPageUrl(e.target.value)} required />
+          <Controller
+            name="landingPageUrl"
+            control={control}
+            render={({ field }) => <input type="url" {...field} required />}
+          />
         </label>
       </div>
       <div>
         <label>Payouts:</label>
-        {payouts.map((payout, index) => (
-          <div key={index}>
-            <input
-              type="number"
-              value={payout}
-              onChange={(e) => handlePayoutChange(index, Number(e.target.value))}
-              required
+        {fields.map((field, index) => (
+          <div key={field.id}>
+            <Controller
+              name={`payouts.${index}.amount`}
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="number"
+                  {...field}
+                  required
+                />
+              )}
             />
-            <button type="button" onClick={() => removePayout(index)}>Remove</button>
+            <Controller
+              name={`payouts.${index}.country`}
+              control={control}
+              render={({ field }) => (
+                <input
+                  type="text"
+                  {...field}
+                  required
+                />
+              )}
+            />
+            <button type="button" onClick={() => remove(index)}>Remove</button>
           </div>
         ))}
-        <button type="button" onClick={addPayout}>Add Payout</button>
+        <button type="button" onClick={() => append({ amount: 0, country: '' })}>Add Payout</button>
       </div>
       <button type="submit">Create Campaign</button>
     </form>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Campaign } from '../types'; // Assuming you have a types file for TypeScript types
-import { fetchCampaigns } from '../services/campaignService';
+import { fetchCampaigns, runCampaign, stopCampaign } from '../services/campaignService';
+import { Campaign } from '../types';
+import CampaignItem from './CampaignItem';
 
 const CampaignList: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -25,6 +26,18 @@ const CampaignList: React.FC = () => {
     setFilteredCampaigns(results);
   }, [searchTerm, campaigns]);
 
+  const handleRun = async (id: string) => {
+    await runCampaign(id);
+    const updatedCampaigns = await fetchCampaigns();
+    setCampaigns(updatedCampaigns);
+  };
+
+  const handleStop = async (id: string) => {
+    await stopCampaign(id);
+    const updatedCampaigns = await fetchCampaigns();
+    setCampaigns(updatedCampaigns);
+  };
+
   return (
     <div>
       <input
@@ -36,10 +49,15 @@ const CampaignList: React.FC = () => {
       <ul>
         {filteredCampaigns.map(campaign => (
           <li key={campaign.id}>
-            <h3>{campaign.title}</h3>
-            <p>Landing Page: {campaign.landingPageUrl}</p>
-            <p>Status: {campaign.isRunning ? 'Running' : 'Stopped'}</p>
-            {/* Add buttons for running/stopping the campaign here */}
+            <CampaignItem
+              id={campaign.id}
+              title={campaign.title}
+              landingPageUrl={campaign.landingPageUrl}
+              payouts={campaign.payouts}
+              isRunning={campaign.isRunning}
+              onRun={handleRun}
+              onStop={handleStop}
+            />
           </li>
         ))}
       </ul>

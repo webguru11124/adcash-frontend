@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Campaign } from '../types';
+import { Campaign, CampaignFormData } from '../types';
 
 const API_URL = '/api/campaigns';
 
@@ -9,7 +9,7 @@ export const fetchCampaigns = async (): Promise<Campaign[]> => {
   return response.data;
 };
 
-export const createCampaign = async (campaign: Campaign): Promise<Campaign> => {
+export const createCampaign = async (campaign: CampaignFormData): Promise<Campaign> => {
   const response = await axios.post<Campaign>(API_URL, campaign);
   return response.data;
 };

@@ -38,7 +38,12 @@ const CampaignDetailsPage: React.FC = () => {
     <div>
       <h1>{campaign.title}</h1>
       <p>Landing Page URL: {campaign.landingPageUrl}</p>
-      <p>Payouts: {campaign.payouts.join(', ')}</p>
+      <p>Payouts:</p>
+      <ul>
+        {campaign.payouts.map(payout => (
+          <li key={payout.id}>{payout.amount} - {payout.country}</li>
+        ))}
+      </ul>
       <p>Status: {campaign.isRunning ? 'Running' : 'Stopped'}</p>
       <button onClick={handleDelete}>Delete Campaign</button>
       <button onClick={() => navigate(`/edit-campaign/${id}`)}>Edit Campaign</button>
