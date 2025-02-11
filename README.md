@@ -1,50 +1,70 @@
-# React + TypeScript + Vite
+# Campaign Management Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a Campaign Management Web Application built with React and TypeScript. It allows users to create, run, stop, and list campaigns with various attributes and functionalities.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Create Campaigns**: Users can create new campaigns by providing a title, landing page URL, and payouts.
+- **List Campaigns**: The application displays a list of all campaigns with options to filter by title, landing page URL, and running status.
+- **Run/Stop Campaigns**: Users can start or stop campaigns directly from the campaign list.
+- **View Campaign Details**: Users can view detailed information about each campaign, including the ability to edit or delete campaigns.
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+campaign-management-app
+├── public
+│   ├── index.html          # Main HTML file
+├── src
+│   ├── components          # Contains reusable components
+│   │   ├── CampaignList.tsx
+│   │   ├── CampaignForm.tsx
+│   │   └── CampaignItem.tsx
+│   ├── pages               # Contains page components
+│   │   ├── HomePage.tsx
+│   │   ├── CreateCampaignPage.tsx
+│   │   └── CampaignDetailsPage.tsx
+│   ├── services            # Contains API service functions
+│   │   └── campaignService.ts
+│   ├── App.tsx             # Main application component
+│   ├── main.tsx            # Entry point of the application
+│   ├── index.css           # Global styles
+│   └── vite-env.d.ts       # TypeScript definitions for Vite
+├── .gitignore              # Files to ignore in version control
+├── package.json            # Project metadata and dependencies
+├── tsconfig.json           # TypeScript configuration
+├── tsconfig.app.json       # TypeScript config for application code
+├── tsconfig.node.json      # TypeScript config for Node.js
+└── vite.config.ts          # Vite configuration
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Setup Instructions
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1. **Clone the repository**:
+   ```
+   git clone <repository-url>
+   cd campaign-management-app
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+2. **Install dependencies**:
+   ```
+   npm install
+   ```
+
+3. **Run the application**:
+   ```
+   npm run dev
+   ```
+
+4. **Open your browser** and navigate to `http://localhost:3000` to view the application.
+
+## Usage
+
+- Navigate to the home page to view the list of campaigns.
+- Click on "Create Campaign" to add a new campaign.
+- Use the search functionality to filter campaigns.
+- Click on a campaign to view its details or to edit/delete it.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or features you would like to add.
