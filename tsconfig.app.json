@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["jest", "@testing-library/jest-dom"],
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -22,5 +23,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "tests/pages/CampaignDetailsPage.test.tsx", "tests/components/CampaignList.test.tsx", "tests/components/CampaignItem.test.tsx", "tests/components/CampaignForm.test.tsx"]
 }

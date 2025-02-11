@@ -27,31 +27,31 @@ const CampaignForm: React.FC<{ onSubmit: (campaign: CampaignFormData) => void }>
   };
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)}>
-      <div>
-        <label>
+    <form onSubmit={handleSubmit(submitHandler)} className="space-y-6">
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
           Title:
           <Controller
             name="title"
             control={control}
-            render={({ field }) => <input type="text" {...field} required />}
+            render={({ field }) => <input type="text" {...field} required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2" />}
           />
         </label>
       </div>
-      <div>
-        <label>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
           Landing Page URL:
           <Controller
             name="landingPageUrl"
             control={control}
-            render={({ field }) => <input type="url" {...field} required />}
+            render={({ field }) => <input type="url" {...field} required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2" />}
           />
         </label>
       </div>
-      <div>
-        <label>Payouts:</label>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">Payouts:</label>
         {fields.map((field, index) => (
-          <div key={field.id}>
+          <div key={field.id} className="flex space-x-2 items-center">
             <Controller
               name={`payouts.${index}.amount`}
               control={control}
@@ -60,6 +60,7 @@ const CampaignForm: React.FC<{ onSubmit: (campaign: CampaignFormData) => void }>
                   type="number"
                   {...field}
                   required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
                 />
               )}
             />
@@ -71,15 +72,16 @@ const CampaignForm: React.FC<{ onSubmit: (campaign: CampaignFormData) => void }>
                   type="text"
                   {...field}
                   required
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-3 py-2"
                 />
               )}
             />
-            <button type="button" onClick={() => remove(index)}>Remove</button>
+            <button type="button" onClick={() => remove(index)} className="text-red-600 hover:text-red-900">Remove</button>
           </div>
         ))}
-        <button type="button" onClick={() => append({ amount: 0, country: '' })}>Add Payout</button>
+        <button type="button" onClick={() => append({ amount: 0, country: '' })} className="mt-2 inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Add Payout</button>
       </div>
-      <button type="submit">Create Campaign</button>
+      <button type="submit" className="inline-flex items-end px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Create Campaign</button>
     </form>
   );
 };

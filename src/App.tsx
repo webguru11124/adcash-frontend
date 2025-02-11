@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create" element={<CreateCampaignPage />} />
-        <Route path="/campaign/:id" element={<CampaignDetailsPage />} />
+        <Route path="/edit-campaign/:id" element={<CampaignDetailsPage />} />
       </Routes>
     </Router>
   );

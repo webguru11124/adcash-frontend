@@ -1,12 +1,17 @@
 import axios from 'axios';
-import { Campaign, CampaignFormData } from '../types';
+import { Campaign, CampaignBackend, CampaignFormData } from '../types';
+import { mapBackendToFrontend, mapFrontendToBackend } from '../utils/mapper';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchCampaigns = async (): Promise<Campaign[]> => {
+export const fetchCampaigns = async (filters?: { title?: string; landingPageUrl?: string; isRunning?: boolean }): Promise<Campaign[]> => {
   try {
-    const response = await axios.get<Campaign[]>(API_URL);
-    return response.data;
+    const response = await axios.get<CampaignBackend[]>(`${API_URL}/filter`, { params: {
+      title: filters?.title,
+      landing_page_url: filters?.landingPageUrl,
+      is_running: filters?.isRunning,
+    } });
+    return response.data.map(mapBackendToFrontend);
   } catch (error) {
     console.error('Error fetching campaigns:', error);
     throw error;
@@ -15,8 +20,8 @@ export const fetchCampaigns = async (): Promise<Campaign[]> => {
 
 export const createCampaign = async (campaign: CampaignFormData): Promise<Campaign> => {
   try {
-    const response = await axios.post<Campaign>(API_URL, campaign);
-    return response.data;
+    const response = await axios.post<CampaignBackend>(API_URL, mapFrontendToBackend(campaign));
+    return mapBackendToFrontend(response.data);
   } catch (error) {
     console.error('Error creating campaign:', error);
     throw error;
@@ -25,8 +30,8 @@ export const createCampaign = async (campaign: CampaignFormData): Promise<Campai
 
 export const updateCampaign = async (id: string, campaign: Partial<Campaign>): Promise<Campaign> => {
   try {
-    const response = await axios.put<Campaign>(`${API_URL}/${id}`, campaign);
-    return response.data;
+    const response = await axios.put<CampaignBackend>(`${API_URL}/${id}`, mapFrontendToBackend(campaign as CampaignFormData));
+    return mapBackendToFrontend(response.data);
   } catch (error) {
     console.error('Error updating campaign:', error);
     throw error;
@@ -44,8 +49,8 @@ export const deleteCampaign = async (id: string): Promise<void> => {
 
 export const runCampaign = async (id: string): Promise<Campaign> => {
   try {
-    const response = await axios.post<Campaign>(`${API_URL}/${id}/run`);
-    return response.data;
+    const response = await axios.put<CampaignBackend>(`${API_URL}/${id}/status`, { is_running: true });
+    return mapBackendToFrontend(response.data);
   } catch (error) {
     console.error('Error running campaign:', error);
     throw error;
@@ -54,8 +59,8 @@ export const runCampaign = async (id: string): Promise<Campaign> => {
 
 export const stopCampaign = async (id: string): Promise<Campaign> => {
   try {
-    const response = await axios.post<Campaign>(`${API_URL}/${id}/stop`);
-    return response.data;
+    const response = await axios.put<CampaignBackend>(`${API_URL}/${id}/status`, { is_running: false });
+    return mapBackendToFrontend(response.data);
   } catch (error) {
     console.error('Error stopping campaign:', error);
     throw error;
@@ -64,8 +69,8 @@ export const stopCampaign = async (id: string): Promise<Campaign> => {
 
 export const getCampaignById = async (id: string): Promise<Campaign> => {
   try {
-    const response = await axios.get<Campaign>(`${API_URL}/${id}`);
-    return response.data;
+    const response = await axios.get<CampaignBackend>(`${API_URL}/${id}`);
+    return mapBackendToFrontend(response.data);
   } catch (error) {
     console.error('Error fetching campaign by ID:', error);
     throw error;

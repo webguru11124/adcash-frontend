@@ -37,30 +37,31 @@ const CampaignDetailsPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="text-center mt-10">Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-center mt-10 text-red-600">{error}</div>;
   }
 
   if (!campaign) {
-    return <div>Campaign not found</div>;
+    return <div className="text-center mt-10">Campaign not found</div>;
   }
 
   return (
-    <div>
-      <h1>{campaign.title}</h1>
-      <p>Landing Page URL: {campaign.landingPageUrl}</p>
-      <p>Payouts:</p>
-      <ul>
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+      <h1 className="text-2xl font-bold mb-4">{campaign.title}</h1>
+      <p className="mb-2"><strong>Landing Page URL:</strong> {campaign.landingPageUrl}</p>
+      <p className="mb-2"><strong>Payouts:</strong></p>
+      <ul className="list-disc list-inside mb-4">
         {campaign.payouts.map(payout => (
           <li key={payout.id}>{payout.amount} - {payout.country}</li>
         ))}
       </ul>
-      <p>Status: {campaign.isRunning ? 'Running' : 'Stopped'}</p>
-      <button onClick={handleDelete}>Delete Campaign</button>
-      <button onClick={() => navigate(`/edit-campaign/${id}`)}>Edit Campaign</button>
+      <p className="mb-4"><strong>Status:</strong> {campaign.isRunning ? 'Running' : 'Stopped'}</p>
+      <div className="flex space-x-4">
+        <button onClick={handleDelete} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Delete Campaign</button>
+      </div>
     </div>
   );
 };
