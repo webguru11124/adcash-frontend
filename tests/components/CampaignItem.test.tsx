@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CampaignItem from '../../src/components/CampaignItem';
 import { Payout } from '../../src/types';

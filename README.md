@@ -58,6 +58,16 @@ campaign-management-app
 
 4. **Open your browser** and navigate to `http://localhost:3000` to view the application.
 
+5. **Run tests**:
+   ```
+   npm test
+   ```
+
+6. **Run linting**:
+   ```
+   npm run lint
+   ```
+
 ## Usage
 
 - Navigate to the home page to view the list of campaigns.
